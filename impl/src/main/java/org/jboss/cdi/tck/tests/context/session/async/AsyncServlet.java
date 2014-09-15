@@ -65,7 +65,7 @@ public class AsyncServlet extends HttpServlet {
 
         SimpleAsyncListener.reset();
         final AsyncContext actx = req.startAsync();
-        actx.addListener(actx.createListener(SimpleAsyncListener.class));
+        actx.addListener(actx.createListener(SimpleAsyncListener.class),req, resp);
         resp.setContentType("text/plain");
 
         if (TEST_TIMEOUT.equals(test)) {

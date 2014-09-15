@@ -62,7 +62,7 @@ public class SimpleAsyncListener implements AsyncListener {
         if (onTimeout == null && onError == null) {
             // Do not check and write info in case of post timeout/error action
             checkApplicationContextAvailability(event);
-            writeInfo(event.getAsyncContext().getResponse());
+            writeInfo(event.getSuppliedResponse());
         }
     }
 
