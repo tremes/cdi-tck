@@ -2738,7 +2738,7 @@
 
     </section>
 
-    <section id="null" title="Primitive types and null values" level="3">
+    <section id="primitive_types_and_null_values" title="Primitive types and null values" level="3">
         <group>
             <text>If necessary, the container performs boxing or unboxing when it injects a value to a field or parameter of primitive or wrapper type.</text>
 
