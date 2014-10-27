@@ -19,7 +19,7 @@ package org.jboss.cdi.tck.tests.extensions.container.event.ws;
 import static org.jboss.cdi.tck.TestGroups.JAVAEE_FULL;
 import static org.jboss.cdi.tck.TestGroups.JAX_WS;
 import static org.jboss.cdi.tck.cdi.Sections.BEAN_DISCOVERY;
-import static org.jboss.cdi.tck.cdi.Sections.PIT;
+import static org.jboss.cdi.tck.cdi.Sections.PROCESS_INJECTION_TARGET;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -54,7 +54,7 @@ public class ContainerEventTest extends AbstractTest {
     }
 
     @Test(groups = {JAVAEE_FULL, JAX_WS})
-    @SpecAssertions({ @SpecAssertion(section = PIT, id = "aag"), @SpecAssertion(section = PIT, id = "abg"),
+    @SpecAssertions({ @SpecAssertion(section = PROCESS_INJECTION_TARGET, id = "aag"), @SpecAssertion(section = PROCESS_INJECTION_TARGET, id = "abg"),
             @SpecAssertion(section = BEAN_DISCOVERY, id = "di") })
     public void testProcessInjectionTargetFiredForWsEndpoint() {
         assertNotNull(ProcessInjectionTargetObserver.getWsEndpointType());

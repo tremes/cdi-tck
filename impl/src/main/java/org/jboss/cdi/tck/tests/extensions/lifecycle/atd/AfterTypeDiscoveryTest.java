@@ -65,15 +65,15 @@ public class AfterTypeDiscoveryTest extends AbstractTest {
     AfterTypeDiscoveryObserver extension;
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "a"), @SpecAssertion(section = ATD, id = "c"),
-            @SpecAssertion(section = ATD, id = "hb") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "a"), @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "c"),
+            @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "hb") })
     public void testInitialInterceptors() {
         assertTrue(extension.getInterceptors().contains(BravoInterceptor.class));
         assertTrue(extension.getInterceptors().contains(AlphaInterceptor.class));
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "b"), @SpecAssertion(section = ATD, id = "ha") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "b"), @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "ha") })
     public void testInitialAlternatives() {
         assertEquals(extension.getAlternatives().size(), 2);
         assertEquals(extension.getAlternatives().get(0), AlphaAlternative.class);
@@ -81,7 +81,7 @@ public class AfterTypeDiscoveryTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "d"), @SpecAssertion(section = ATD, id = "hc") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "d"), @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "hc") })
     public void testInitialDecorators() {
         assertEquals(extension.getDecorators().size(), 2);
         assertEquals(extension.getDecorators().get(0), AlphaDecorator.class);
@@ -89,7 +89,7 @@ public class AfterTypeDiscoveryTest extends AbstractTest {
     }
 
     @Test(dataProvider = ARQUILLIAN_DATA_PROVIDER)
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "gb") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "gb") })
     public void testFinalInterceptors(TransactionLogger logger) {
 
         AlphaInterceptor.reset();
@@ -104,21 +104,23 @@ public class AfterTypeDiscoveryTest extends AbstractTest {
     }
 
     @Test(dataProvider = ARQUILLIAN_DATA_PROVIDER)
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "gc") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "gc") })
     public void testFinalDecorators(TransactionLogger logger) {
         assertEquals(logger.log("ping"), "pingbravoalphacharlie");
     }
 
-    @Test
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "ga") })
-    public void testFinalAlternatives() {
+    @Test(dataProvider = ARQUILLIAN_DATA_PROVIDER)
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "ga") })
+    public void testFinalAlternatives(TransactionLogger logger) {
+        // assert that proper alternative is injected
+        assertEquals(logger.getAlternativeClass(), DeltaAlternative.class);
         assertTrue(getBeans(AlphaAlternative.class).isEmpty());
         assertTrue(getBeans(BravoAlternative.class).isEmpty());
     }
 
     @SuppressWarnings("serial")
     @Test
-    @SpecAssertions({ @SpecAssertion(section = ATD, id = "e"), @SpecAssertion(section = BEAN_DISCOVERY, id = "r") })
+    @SpecAssertions({ @SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "e"), @SpecAssertion(section = BEAN_DISCOVERY, id = "r") })
     public void testAddAnnotatedType() {
         assertTrue(extension.isBossObserved());
         getUniqueBean(Boss.class);
@@ -133,13 +135,13 @@ public class AfterTypeDiscoveryTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = PP, id = "ab"), @SpecAssertion(section = PP, id = "bb") })
+    @SpecAssertions({ @SpecAssertion(section = PROCESS_PRODUCER, id = "ab"), @SpecAssertion(section = PROCESS_PRODUCER, id = "bb") })
     public void testProcessProducerEventFiredForProducerField() {
         assertTrue(extension.isProcessProcuderFieldObserved());
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = PP, id = "aa"), @SpecAssertion(section = PP, id = "ba") })
+    @SpecAssertions({ @SpecAssertion(section = PROCESS_PRODUCER, id = "aa"), @SpecAssertion(section = PROCESS_PRODUCER, id = "ba") })
     public void testProcessProducerEventFiredForProducerMethod() {
         assertTrue(extension.isProcessProcuderMethodObserved());
     }
