@@ -16,7 +16,7 @@
  */
 package org.jboss.cdi.tck.tests.extensions.annotated.synthetic;
 
-import static org.jboss.cdi.tck.cdi.Sections.PAT;
+import static org.jboss.cdi.tck.cdi.Sections.PROCESS_ANNOTATED_TYPE;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -62,9 +62,9 @@ public class ProcessSyntheticAnnotatedTypeTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = PAT, id = "ae"), @SpecAssertion(section = PAT, id = "af"),
-            @SpecAssertion(section = PAT, id = "j"), @SpecAssertion(section = PAT, id = "ag"),
-            @SpecAssertion(section = PAT, id = "ah") })
+    @SpecAssertions({ @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "ae"), @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "af"),
+            @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "j"), @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "ag"),
+            @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "ah") })
     public void testEventsFired() {
         Set<Class<?>> patClasses = verifyingExtension.getPatClasses();
         Set<Class<?>> psatClasses = verifyingExtension.getPsatClasses();
@@ -73,12 +73,12 @@ public class ProcessSyntheticAnnotatedTypeTest extends AbstractTest {
         assertTrue(psatClasses.contains(Apple.class));
         assertTrue(psatClasses.contains(Pear.class));
         assertTrue(psatClasses.contains(Vegetables.class));
-        // Also verify that PAT is fired for classes in a BDA
+        // Also verify that PROCESS_ANNOTATED_TYPE is fired for classes in a BDA
         assertTrue(patClasses.contains(Orange.class));
         assertTrue(patClasses.contains(Apple.class));
         assertTrue(patClasses.contains(Pear.class));
 
-        // Verify that PAT is not fired for annotation type
+        // Verify that PROCESS_ANNOTATED_TYPE is not fired for annotation type
         assertFalse(psatClasses.contains(TestAnnotation.class));
         assertFalse(psatClasses.contains(Juicy.class));
 
@@ -100,7 +100,7 @@ public class ProcessSyntheticAnnotatedTypeTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = PAT, id = "bd") })
+    @SpecAssertions({ @SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "bd") })
     public void testEventsSources() {
         Map<Class<?>, Extension> sources = verifyingExtension.getSources();
         assertTrue(sources.get(Apple.class) instanceof RegisteringExtension1);

@@ -61,7 +61,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = BBD, id = "b")})
+    @SpecAssertions({@SpecAssertion(section = BEFORE_BEAN_DISCOVERY, id = "b")})
     public void testBeforeBeanDiscoveryEventFails() {
         final BeforeBeanDiscovery event = extension.getBeforeBeanDiscovery();
         final AnnotatedType<?> type = beanManager.createAnnotatedType(ContainerLifeCycleEventRuntimeInvocationTest.class);
@@ -111,7 +111,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = ATD, id = "j")})
+    @SpecAssertions({@SpecAssertion(section = AFTER_TYPE_DISCOVERY, id = "j")})
     public void testAfterTypeDiscoveryEventFails() {
 
         final AfterTypeDiscovery event = extension.getAfterTypeDiscovery();
@@ -139,7 +139,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = ABD, id = "h")})
+    @SpecAssertions({@SpecAssertion(section = AFTER_BEAN_DISCOVERY, id = "h")})
     public void testAfterBeanDiscoveryEventFails() {
 
         final AfterBeanDiscovery event = extension.getAfterBeanDiscovery();
@@ -177,7 +177,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = ADV, id = "e")})
+    @SpecAssertions({@SpecAssertion(section = AFTER_DEPLOYMENT_VALIDATION, id = "e")})
     public void testAfterDeploymentValidationEventFails() {
         final AfterDeploymentValidation event = extension.getAfterDeploymentValidation();
         new Invocation() {
@@ -188,7 +188,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PAT, id = "f")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "f")})
     public void testProcessAnnotatedTypeEventFails() {
         final ProcessAnnotatedType<SimpleBean> event = extension.getProcessAnnotatedType();
         final AnnotatedType<SimpleBean> type = beanManager.createAnnotatedType(SimpleBean.class);
@@ -206,7 +206,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PAT, id = "f")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_ANNOTATED_TYPE, id = "f")})
     public void testProcessSyntheticAnnotatedTypeEventFails() {
         final ProcessSyntheticAnnotatedType<SimpleBean> event = extension.getProcessSyntheticAnnotatedType();
         final AnnotatedType<SimpleBean> type = beanManager.createAnnotatedType(SimpleBean.class);
@@ -236,7 +236,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PB, id = "o")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN, id = "o")})
     public void testProcessBeanEventFails() {
         final ProcessBean<SimpleBean> event = extension.getProcessBean();
         new Invocation() {
@@ -260,7 +260,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PB, id = "o")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN, id = "o")})
     public void testProcessManagedBeanEventFails() {
         final ProcessManagedBean<SimpleBean> event = extension.getProcessManagedBean();
         new Invocation() {
@@ -290,7 +290,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PB, id = "o")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN, id = "o")})
     public void testProcessSessionBeanEventFails() {
         final ProcessSessionBean<SessionBean> event = extension.getProcessSessionBean();
         new Invocation() {
@@ -332,7 +332,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PB, id = "o")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN, id = "o")})
     public void testProcessProducerMethodEventFails() {
         final ProcessProducerMethod<Integer, SimpleBean> event = extension.getProcessProducerMethod();
         new Invocation() {
@@ -368,7 +368,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PB, id = "o")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN, id = "o")})
     public void testProcessProducerFieldEventFails() {
         final ProcessProducerField<Integer, SimpleBean> event = extension.getProcessProducerField();
         new Invocation() {
@@ -404,7 +404,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PBA, id = "f")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_BEAN_ATTRIBUTES, id = "f")})
     public void testProcessBeanAttributesEventFails() {
         final ProcessBeanAttributes<SimpleBean> event = extension.getProcessBeanAttributes();
         AnnotatedType<SimpleBean> type = beanManager.createAnnotatedType(SimpleBean.class);
@@ -437,7 +437,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = POM, id = "dc")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_OBSERVER_METHOD, id = "dc")})
     public void testProcessObserverMethodEventFails() {
         final ProcessObserverMethod<SimpleBean, ?> event = extension.getProcessObserverMethod();
         new Invocation() {
@@ -458,7 +458,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PIT, id = "g")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_INJECTION_TARGET, id = "g")})
     public void testProcessInjectionTargetEventFails() {
         final ProcessInjectionTarget<SimpleBean> event = extension.getProcessInjectionTarget();
         AnnotatedType<?> type = beanManager.createAnnotatedType(SimpleBean.class);
@@ -487,7 +487,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PIP, id = "e")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_INJECTION_POINT, id = "e")})
     public void testProcessInjectionPointEventFails() {
         final ProcessInjectionPoint<SimpleBean, ?> event = extension.getProcessInjectionPoint();
         AnnotatedType<?> type = beanManager.createAnnotatedType(SimpleBean.class);
@@ -512,7 +512,7 @@ public class ContainerLifeCycleEventRuntimeInvocationTest extends AbstractTest {
     }
 
     @Test
-    @SpecAssertions({@SpecAssertion(section = PP, id = "i")})
+    @SpecAssertions({@SpecAssertion(section = PROCESS_PRODUCER, id = "i")})
     public void testProcessProducer() {
         final ProcessProducer<SimpleBean, Integer> event = extension.getProcessProducer();
         new Invocation() {
