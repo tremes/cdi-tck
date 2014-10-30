@@ -280,15 +280,15 @@
             <text>There are five standard scope types defined by this specification, all defined in the package |javax.enterprise.context|.</text>
 
             <assertion id="aa">
-                <text> The |@RequestScoped|~, |@ApplicationScoped| and |@SessionScoped|~ annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
+                <text>The |@RequestScoped|, |@ApplicationScoped| and |@SessionScoped| annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
             </assertion>
 
             <assertion id="ab">
-                <text>The ~|@RequestScoped|, ~|@ApplicationScoped|~ and |@SessionScoped|~ annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
+                <text>The |@RequestScoped|, |@ApplicationScoped| and |@SessionScoped| annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
             </assertion>
 
             <assertion id="ac">
-                <text>The ~|@RequestScoped|, |@ApplicationScoped| and ~|@SessionScoped| annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
+                <text>The |@RequestScoped|, |@ApplicationScoped| and |@SessionScoped| annotations defined in Section 6.7, "Context management for built-in scopes" represent the standard scopes defined by the Java Servlets specification.</text>
             </assertion>
 
             <assertion id="ba">
@@ -309,11 +309,11 @@
 
     <section id="defining_new_scope_type" title="Defining new scope types" level="3">
         <assertion id="aa">
-            <text>A scope type is a Java annotation defined as |@Target({TYPE, METHOD, FIELD})|~ and |@Retention(RUNTIME)|~.</text>
+            <text>A scope type is a Java annotation defined as |@Target({TYPE, METHOD, FIELD})| and |@Retention(RUNTIME)|.</text>
         </assertion>
 
         <assertion id="ab" testable="false">
-            <text>A scope type is a Java annotation defined as ~|@Target({TYPE, METHOD, FIELD})| and ~|@Retention(RUNTIME)|.</text>
+            <text>A scope type is a Java annotation defined as |@Target({TYPE, METHOD, FIELD})| and |@Retention(RUNTIME)|.</text>
             <note>Non-runtime retention annotations are discarded by the compiler</note>
         </assertion>
 
@@ -1165,11 +1165,11 @@
         </assertion>
 
         <assertion id="ga">
-            <text>Interceptors ~and decorators~ may not declare producer methods. If an interceptor ~or decorator~ has a method annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
+            <text>Interceptors and decorators may not declare producer methods. If an interceptor or decorator has a method annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
         </assertion>
 
         <assertion id="gb">
-            <text>~Interceptors and~ decorators may not declare producer methods. If an ~interceptor or~ decorator has a method annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
+            <text>Interceptors and decorators may not declare producer methods. If an interceptor or decorator has a method annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
         </assertion>
 
         <assertion id="h">
@@ -1209,12 +1209,12 @@
 
     <section id="producer_field" title="Producer fields" level="2">
         <assertion id="aa">
-            <text>A producer field must be a default-access, public, protected or private, field of a managed bean class ~or session bean class~</text>
+            <text>A producer field must be a default-access, public, protected or private, field of a managed bean class or session bean class</text>
             <note>Just test that a producer field on these works</note>
         </assertion>
 
         <assertion id="ab">
-            <text>A producer field must be a default-access, public, protected or private, field of a ~managed bean class or~ session bean class</text>
+            <text>A producer field must be a default-access, public, protected or private, field of a managed bean class or session bean class</text>
             <note>Just test that a producer field on these works</note>
         </assertion>
 
@@ -1328,11 +1328,11 @@
         </assertion>
 
         <assertion id="ia">
-            <text>Interceptors ~and decorators~ may not declare producer fields. If an interceptor ~or decorator~ has a field annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
+            <text>Interceptors and decorators may not declare producer fields. If an interceptor or decorator has a field annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
         </assertion>
 
         <assertion id="ib">
-            <text>~Interceptors~ and decorators may not declare producer fields. If ~an interceptor or~ decorator has a field annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
+            <text>Interceptors and decorators may not declare producer fields. If an interceptor or decorator has a field annotated |@Produces|, the container automatically detects the problem and treats it as a definition error.</text>
         </assertion>
     </section>
 
