@@ -39,8 +39,8 @@ public class AssetUtilTest {
         assertEquals(AssetUtil.readAssetContent(stringAsset).trim(), content.trim());
 
         ClassLoaderAsset classLoaderAsset = new ClassLoaderAsset("beans-01.xml");
-        assertEquals(AssetUtil.readAssetContent(classLoaderAsset).trim().replace("\n", ""),
-                FileUtils.readFileToString(new File("src/test/resources/beans-01.xml")).trim().replace("\n", ""));
+        assertEquals(AssetUtil.readAssetContent(classLoaderAsset).trim().replace("\\n", ""),
+                FileUtils.readFileToString(new File("src/test/resources/beans-01.xml"),"UTF-8").trim().replace("\\n", ""));
     }
 
 }
