@@ -18,6 +18,7 @@ package org.jboss.cdi.tck.tests.event.observer.async.handlingExceptions;
 
 import static org.jboss.cdi.tck.cdi.Sections.ASYNC_EXCEPTION;
 import static org.jboss.cdi.tck.cdi.Sections.OBSERVER_NOTIFICATION;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -26,7 +27,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.FireAsyncException;
 import javax.inject.Inject;
@@ -46,6 +49,8 @@ public class MultipleExceptionsInObserversNotificationTest extends AbstractTest 
     @Inject
     Event<RadioMessage> event;
 
+    AtomicBoolean active = new AtomicBoolean(false);
+
     @Deployment
     public static WebArchive createTestArchive() {
         return new WebArchiveBuilder().withTestClassPackage(MultipleExceptionsInObserversNotificationTest.class).build();
@@ -56,7 +61,11 @@ public class MultipleExceptionsInObserversNotificationTest extends AbstractTest 
             @SpecAssertion(section = OBSERVER_NOTIFICATION, id = "cb") })
     public void testMultipleExceptionsDuringVariousObserversNotification() throws InterruptedException {
         BlockingQueue<Throwable> queue = new LinkedBlockingQueue<>();
-        event.fireAsync(new RadioMessage()).handle((event, throwable) -> queue.add(throwable));
+        event.fireAsync(new RadioMessage()).handle((event, throwable) -> {
+            func(event, throwable);
+            queue.offer(throwable);
+            return throwable;
+        });
 
         Throwable throwable = queue.poll(2, TimeUnit.SECONDS);
         assertNotNull(throwable);
@@ -65,7 +74,7 @@ public class MultipleExceptionsInObserversNotificationTest extends AbstractTest 
         assertTrue(NewYorkRadioStation.observed.get());
         assertTrue(ParisRadioStation.observed.get());
         assertTrue(PragueRadioStation.observed.get());
-        
+
         assertTrue(throwable instanceof FireAsyncException);
 
         List<Throwable> suppressedExceptions = Arrays.asList(throwable.getSuppressed());
@@ -75,5 +84,12 @@ public class MultipleExceptionsInObserversNotificationTest extends AbstractTest 
         assertTrue(suppressedExceptions.stream().anyMatch(t -> t.getMessage().equals(ParisRadioStation.class.getName())));
         assertTrue(suppressedExceptions.stream().anyMatch(t -> t.getMessage().equals(NewYorkRadioStation.class.getName())));
         assertTrue(suppressedExceptions.stream().anyMatch(t -> t.getMessage().equals(LondonRadioStation.class.getName())));
+        assertFalse(active.get());
+
+    }
+
+    private Throwable func(RadioMessage mess, Throwable t) {
+        active.set(getCurrentManager().getContext(SessionScoped.class).isActive());
+        return t;
     }
 }
