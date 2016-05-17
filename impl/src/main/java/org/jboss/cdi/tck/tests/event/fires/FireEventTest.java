@@ -16,9 +16,11 @@
  */
 package org.jboss.cdi.tck.tests.event.fires;
 
+import org.testng.Assert;
 import static org.jboss.cdi.tck.TestGroups.REWRITE;
 import static org.jboss.cdi.tck.cdi.Sections.BM_FIRE_EVENT;
 import static org.jboss.cdi.tck.cdi.Sections.EVENT;
+import static org.jboss.cdi.tck.cdi.Sections.EVENT_TYPES_AND_QUALIFIER_TYPES;
 import static org.jboss.cdi.tck.cdi.Sections.FIRING_EVENTS;
 import static org.jboss.cdi.tck.cdi.Sections.FIRING_EVENTS_SYNCHRONOUSLY;
 import static org.jboss.cdi.tck.cdi.Sections.OBSERVER_RESOLUTION;
@@ -83,7 +85,16 @@ public class FireEventTest extends AbstractTest {
     @Test(expectedExceptions = { IllegalArgumentException.class })
     @SpecAssertion(section = BM_FIRE_EVENT, id = "c")
     public void testTypeVariableEventTypeFails() throws Exception {
-        getContextualReference(Bar.class).<Integer> fireWithTypeVariable();
+        getContextualReference(Bar.class).<Integer>bmFireWithTypeVariable();
+    }
+
+    @Test
+    @SpecAssertion(section = EVENT_TYPES_AND_QUALIFIER_TYPES, id = "cc")
+    public void testWildcardTypeIsNotConsideredAsUnresolvable() throws Exception {
+        FooObserver.reset();
+        getContextualReference(Bar.class).<Integer>fireWithTypeVariable();
+        Assert.assertTrue(FooObserver.fooAnyObserved);
+        Assert.assertTrue(FooObserver.fooIntegerObserved);
     }
 
     @SuppressWarnings("serial")
