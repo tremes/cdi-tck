@@ -33,11 +33,8 @@ public class ProcessObserverMethodObserver implements Extension {
     public static Set<Annotation> pineAppleQualifiers;
 
     void observesBreadPOM(@Observes ProcessObserverMethod<Bread, FoodObserver> event) {
-        // set beanClass of the observer to FruitObserver
         // set observed type to Apple
         event.configureObserverMethod()
-                // FIXME this will be likely forbidden
-                // .beanClass(FruitObserver.class)
                 .observedType(Apple.class);
     }
 

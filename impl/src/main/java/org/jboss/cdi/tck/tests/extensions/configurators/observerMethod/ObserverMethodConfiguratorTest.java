@@ -31,6 +31,7 @@ import javax.interceptor.Interceptor;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.cdi.tck.AbstractTest;
 import org.jboss.cdi.tck.cdi.Sections;
+import org.jboss.cdi.tck.literals.ObservesLiteral;
 import org.jboss.cdi.tck.shrinkwrap.WebArchiveBuilder;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.test.audit.annotations.SpecAssertion;
@@ -49,14 +50,13 @@ public class ObserverMethodConfiguratorTest extends AbstractTest {
     @Deployment
     public static WebArchive createTestArchive() {
         return new WebArchiveBuilder().withTestClassPackage(ObserverMethodConfiguratorTest.class)
-                .withExtension(ProcessObserverMethodObserver.class).build();
+                .withClass(ObservesLiteral.class)
+                .withExtensions(ProcessObserverMethodObserver.class, AfterBeanDiscoveryObserver.class).build();
     }
 
     @Test
-    // FIXME remove or enable assertion "ba" in the future
-    @SpecAssertions({ //@SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "ba"),
-            @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "bb") })
-    public void changeBeanClassAndObservedType() {
+    @SpecAssertions({ @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "bb") })
+    public void changeObservedType() {
         Set<ObserverMethod<? super Apple>> appleEventObservers = getCurrentManager().resolveObserverMethods(new Apple(), Any.Literal.INSTANCE);
         Assert.assertEquals(appleEventObservers.size(), 1);
         Assert.assertEquals(appleEventObservers.iterator().next().getBeanClass(), FoodObserver.class);
@@ -94,8 +94,25 @@ public class ObserverMethodConfiguratorTest extends AbstractTest {
     @SpecAssertions({ @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "bc"),
             @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "bh") })
     public void notifyAcceptingConsumerNotified() {
-        getCurrentManager().fireEvent(new Pineapple(), Delicious.DeliciousLiteral.INSTANCE);
+        getCurrentManager().fireEvent(new Pineapple(), Any.Literal.INSTANCE, Delicious.DeliciousLiteral.INSTANCE);
         Assert.assertTrue(ProcessObserverMethodObserver.consumerNotified.get());
         Assert.assertEquals(ProcessObserverMethodObserver.pineAppleQualifiers, Arrays.asList(Any.Literal.INSTANCE, Delicious.DeliciousLiteral.INSTANCE));
+    }
+
+    @Test
+    @SpecAssertions({ @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "aa"),
+            @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "ab"),
+            @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "ac"),
+            @SpecAssertion(section = Sections.OBSERVER_METHOD_CONFIGURATOR, id = "ba") })
+    public void addNewObserverMethodFromReadingExistingOne() {
+        AfterBeanDiscoveryObserver.reset();
+        getCurrentManager().fireEvent(new Pineapple(), Any.Literal.INSTANCE, Delicious.DeliciousLiteral.INSTANCE);
+        getCurrentManager().fireEvent(new Melon(), Any.Literal.INSTANCE);
+        getCurrentManager().fireEvent(new Peach(), Any.Literal.INSTANCE);
+        Set<ObserverMethod<? super Peach>> peachEventObservers = getCurrentManager().resolveObserverMethods(new Peach(), Any.Literal.INSTANCE);
+        Assert.assertEquals(peachEventObservers.size(), 2);
+        Assert.assertTrue(AfterBeanDiscoveryObserver.newPineappleObserverNotified.get());
+        Assert.assertTrue(AfterBeanDiscoveryObserver.newMelonObserverNotified.get());
+        Assert.assertTrue(AfterBeanDiscoveryObserver.newPeachObserverNotified.get());
     }
 }

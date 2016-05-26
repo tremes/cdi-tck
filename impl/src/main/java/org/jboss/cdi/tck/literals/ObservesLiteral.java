@@ -14,31 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.cdi.tck.tests.extensions.configurators.observerMethod;
+package org.jboss.cdi.tck.literals;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.event.Reception;
+import javax.enterprise.event.TransactionPhase;
+import javax.enterprise.util.AnnotationLiteral;
 
-@ApplicationScoped
-public class FruitObserver {
+/**
+ * @author Tomas Remes
+ */
+public class ObservesLiteral extends AnnotationLiteral<Observes> implements Observes {
 
-    public void observesPear(@Observes Pear pear) {
+    public static ObservesLiteral INSTANCE = new ObservesLiteral(Reception.ALWAYS, TransactionPhase.IN_PROGRESS);
+
+    private final Reception reception;
+    private final TransactionPhase transactionPhase;
+
+    public ObservesLiteral(Reception reception, TransactionPhase transactionPhase) {
+        this.reception = reception;
+        this.transactionPhase = transactionPhase;
     }
 
-    public void observesOrange(@Observes @Ripe Orange orange) {
+    @Override
+    public Reception notifyObserver() {
+        return reception;
     }
 
-    public void observesOrange(@Observes Pineapple pineapple) {
-    }
-
-    public void observesBanana(@Observes Banana banana) {
-
-    }
-
-    public void observesMelon(@Observes Melon melon) {
-
-    }
-
-    public void observesPeach(Peach peach){
+    @Override
+    public TransactionPhase during() {
+        return transactionPhase;
     }
 }

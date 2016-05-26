@@ -16,29 +16,5 @@
  */
 package org.jboss.cdi.tck.tests.extensions.configurators.observerMethod;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-
-@ApplicationScoped
-public class FruitObserver {
-
-    public void observesPear(@Observes Pear pear) {
-    }
-
-    public void observesOrange(@Observes @Ripe Orange orange) {
-    }
-
-    public void observesOrange(@Observes Pineapple pineapple) {
-    }
-
-    public void observesBanana(@Observes Banana banana) {
-
-    }
-
-    public void observesMelon(@Observes Melon melon) {
-
-    }
-
-    public void observesPeach(Peach peach){
-    }
+public class Banana {
 }
