@@ -13,19 +13,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package org.jboss.cdi.tck.tests.se.container;
+ */package org.jboss.cdi.tck.tests.se.container.testPackage;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Named;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-public class FooProducer {
+@ApplicationScoped
+public class Apple {
 
-    @AlternativeStereotype
-    @Produces
-    @Named
-    public Foo createFoo(){
-        return new Foo();
+    @Inject
+    Worm worm;
+
+    public Worm getWorm() {
+        return worm;
     }
-
 }

@@ -24,6 +24,7 @@ import static org.jboss.cdi.tck.cdi.Sections.SE_CONTAINER;
 import java.util.Optional;
 import java.util.Set;
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.enterprise.inject.spi.Bean;
@@ -32,6 +33,9 @@ import javax.enterprise.inject.spi.BeanManager;
 import org.jboss.arquillian.container.se.api.ClassPath;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.testng.Arquillian;
+import org.jboss.cdi.tck.tests.se.container.testPackage.Apple;
+import org.jboss.cdi.tck.tests.se.container.testPackage.Worm;
+import org.jboss.cdi.tck.tests.se.container.testPackage.nestedPackage.Pear;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -51,8 +55,8 @@ public class BootstrapSEContainerTest extends Arquillian {
     @Deployment
     public static Archive<?> deployment() {
         final JavaArchive testArchive = ShrinkWrap.create(JavaArchive.class)
-                .addClasses(Foo.class, Baz.class, Qux.class, BazObserver.class, QuxObserver.class, Shape.class, Square.class, Circle.class,
-                        BootstrapSEContainerTest.class)
+                .addClasses(Foo.class, Baz.class, Qux.class, BazObserver.class, QuxObserver.class, Shape.class, Square.class, Circle.class, FooProducer.class,
+                        AlternativeStereotype.class, BootstrapSEContainerTest.class, Apple.class, Worm.class, Pear.class)
                 .addAsResource(EmptyAsset.INSTANCE,
                         "META-INF/beans.xml");
         final JavaArchive implicitArchive = ShrinkWrap.create(JavaArchive.class).addClass(Bar.class);
@@ -63,7 +67,7 @@ public class BootstrapSEContainerTest extends Arquillian {
     @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "a"),
             @SpecAssertion(section = SE_BOOTSTRAP, id = "b"),
             @SpecAssertion(section = SE_BOOTSTRAP, id = "c"),
-            @SpecAssertion(section = SE_BOOTSTRAP, id = "dn"),
+            @SpecAssertion(section = SE_BOOTSTRAP, id = "do"),
             @SpecAssertion(section = SE_CONTAINER, id = "cb") })
     public void testContainerIsInitialized() {
         SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();
@@ -87,7 +91,7 @@ public class BootstrapSEContainerTest extends Arquillian {
 
     @Test
     @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "c"), @SpecAssertion(section = SE_BOOTSTRAP, id = "da"),
-            @SpecAssertion(section = SE_BOOTSTRAP, id = "dn"),
+            @SpecAssertion(section = SE_BOOTSTRAP, id = "do"),
             @SpecAssertion(section = SE_BOOTSTRAP, id = "e") })
     public void testInvocationOfInitializedMethodReturnsNewSeContainerInstance() {
         SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();//.initialize();
@@ -101,8 +105,8 @@ public class BootstrapSEContainerTest extends Arquillian {
         Assert.assertNotEquals(seContainer1, seContainer2);
     }
 
-    @Test
-    @SpecAssertions({ @SpecAssertion(section = BEAN_ARCHIVE_SE, id = "b"), @SpecAssertion(section = SE_BOOTSTRAP, id = "di") })
+//    @Test
+    @SpecAssertions({ @SpecAssertion(section = BEAN_ARCHIVE_SE, id = "b"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dj") })
     public void testImplicitArchiveDiscovered() {
         try (SeContainer seContainer = SeContainerInitializer.newInstance().addProperty(IMPLICIT_SCAN_KEY, true).initialize()) {
             Bar bar = seContainer.select(Bar.class).get();
@@ -112,7 +116,7 @@ public class BootstrapSEContainerTest extends Arquillian {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "db"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dl"),
+    @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "db"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dm"),
             @SpecAssertion(section = SE_CONTAINER, id = "a") })
     public void testSyntheticArchive() {
         SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();
@@ -128,8 +132,8 @@ public class BootstrapSEContainerTest extends Arquillian {
     }
 
     @Test
-    @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "db"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dg"),
-            @SpecAssertion(section = SE_BOOTSTRAP, id = "dh"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dl") })
+    @SpecAssertions({ @SpecAssertion(section = SE_BOOTSTRAP, id = "db"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dh"),
+            @SpecAssertion(section = SE_BOOTSTRAP, id = "di"), @SpecAssertion(section = SE_BOOTSTRAP, id = "dm") })
     public void testAlternativesInSE() {
         SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();
         try (SeContainer seContainer = seContainerInitializer.disableDiscovery()
@@ -146,6 +150,34 @@ public class BootstrapSEContainerTest extends Arquillian {
 
         }
 
+    }
+
+    @Test
+    public void testAddPackageNotRecursively() {
+        SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();
+        try (SeContainer seContainer = seContainerInitializer.disableDiscovery()
+                .addPackages(Apple.class.getPackage())
+                .initialize()) {
+            Instance<Apple> appleInstance = seContainer.select(Apple.class);
+            Instance<Pear> pearInstance = seContainer.select(Pear.class);
+            Assert.assertFalse(appleInstance.isUnsatisfied());
+            Assert.assertTrue(pearInstance.isUnsatisfied());
+            Assert.assertNotNull(appleInstance.get().getWorm());
+        }
+    }
+
+    @Test
+    public void testAddPackageRecursively() {
+        SeContainerInitializer seContainerInitializer = SeContainerInitializer.newInstance();
+        try (SeContainer seContainer = seContainerInitializer.disableDiscovery()
+                .addPackages(true, Apple.class.getPackage())
+                .initialize()) {
+            Instance<Apple> appleInstance = seContainer.select(Apple.class);
+            Instance<Pear> pearInstance = seContainer.select(Pear.class);
+            Assert.assertFalse(appleInstance.isUnsatisfied());
+            Assert.assertFalse(pearInstance.isUnsatisfied());
+            Assert.assertNotNull(appleInstance.get().getWorm());
+        }
     }
 
 }
