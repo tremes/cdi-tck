@@ -17,7 +17,6 @@
 package org.jboss.cdi.tck.tests.extensions.beanDiscovery.event.ordering;
 
 import static org.jboss.cdi.tck.cdi.Sections.BEAN_DISCOVERY_STEPS;
-import static org.jboss.cdi.tck.cdi.Sections.BM_OBTAIN_BEAN;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -27,13 +26,12 @@ import javax.enterprise.inject.spi.ProcessBeanAttributes;
 import javax.enterprise.inject.spi.ProcessInjectionPoint;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessManagedBean;
-import javax.enterprise.inject.spi.ProcessProducer;
-import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.cdi.tck.AbstractTest;
 import org.jboss.cdi.tck.shrinkwrap.WebArchiveBuilder;
+import org.jboss.cdi.tck.util.ActionSequence;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.test.audit.annotations.SpecAssertion;
 import org.jboss.test.audit.annotations.SpecAssertions;
@@ -64,12 +62,14 @@ public class LifecycleEventOrderingTest extends AbstractTest {
         @SpecAssertion(section = BEAN_DISCOVERY_STEPS, id = "jc"),
         @SpecAssertion(section = BEAN_DISCOVERY_STEPS, id = "jd") })
     public void testEventsWereFiredInCorrectOrderForProducer() {
-        List<Object> actualListOfEvents = extension.getListOfProducerEvents();
-        assertEquals(4, actualListOfEvents.size());
-        assertTrue(actualListOfEvents.get(0) instanceof ProcessInjectionPoint);
-        assertTrue(actualListOfEvents.get(1) instanceof ProcessProducer);
-        assertTrue(actualListOfEvents.get(2) instanceof ProcessBeanAttributes);
-        assertTrue(actualListOfEvents.get(3) instanceof ProcessProducerMethod);
+        ActionSequence producerEventsSeq = ActionSequence.getSequence(ProductManagement.PRODUCER_SEQ);
+        producerEventsSeq.assertSequenceDataEquals("PIP", "PP", "PBA", "PPM");
+//        List<Object> actualListOfEvents = extension.getListOfProducerEvents();
+//        assertEquals(4, actualListOfEvents.size());
+//        assertTrue(actualListOfEvents.get(0) instanceof ProcessInjectionPoint);
+//        assertTrue(actualListOfEvents.get(1) instanceof ProcessProducer);
+//        assertTrue(actualListOfEvents.get(2) instanceof ProcessBeanAttributes);
+//        assertTrue(actualListOfEvents.get(3) instanceof ProcessProducerMethod);
     }
 
     @Test

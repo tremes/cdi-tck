@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBeanAttributes;
 import javax.enterprise.inject.spi.ProcessInjectionPoint;
@@ -28,6 +29,7 @@ import javax.enterprise.inject.spi.ProcessManagedBean;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
 
+import org.jboss.cdi.tck.util.ActionSequence;
 /**
  * CDI defines this order (see Bean Discovery chapter) for producers: PIP -> PP -> PBA -> PPM (e.g. ProcessBean for producer
  * methods) And following order for managed beans: PIP -> PIT -> PBA -> PB
@@ -41,21 +43,27 @@ public class ProductManagement implements Extension {
     private List<Object> listOfProducerEvents = new ArrayList<>();
     private List<Object> listOfBeanEvents = new ArrayList<>();
 
+    public static String PRODUCER_SEQ = "PRODUCER_EVENTS_ORDER_SEQ";
+
+    public void observeBBD(@Observes BeforeBeanDiscovery bbd) {
+        ActionSequence.reset();
+    }
+
     // producer method observers
     public void observePIP(@Observes ProcessInjectionPoint<PoorWorker, String> pip) {
-        listOfProducerEvents.add(pip);
+        ActionSequence.addAction(PRODUCER_SEQ, "PIP");
     }
 
     public void observePP(@Observes ProcessProducer<PoorWorker, HighQualityAndLowCostProduct> pp) {
-        listOfProducerEvents.add(pp);
+        ActionSequence.addAction(PRODUCER_SEQ, "PP");
     }
 
     public void observePBA(@Observes ProcessBeanAttributes<HighQualityAndLowCostProduct> pba) {
-        listOfProducerEvents.add(pba);
+        ActionSequence.addAction(PRODUCER_SEQ, "PBA");
     }
 
     public void observerPPM(@Observes ProcessProducerMethod<HighQualityAndLowCostProduct, PoorWorker> ppm) {
-        listOfProducerEvents.add(ppm);
+        ActionSequence.addAction(PRODUCER_SEQ, "PPM");
     }
 
     // managed bean observers - PIP - PIT - PBA - PB
